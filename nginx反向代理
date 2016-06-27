@@ -1,0 +1,65 @@
+nginx+tomcat配置(这里主要是实现通过nginx反向代理tomcat服务）
+
+Tomcat最主要功能是提供Servlet/jsp容器，它虽然可以作为独立的 web服务器，但性能方面远不如其他http服务器
+通常应用中，会把tomcat与http服务器集成。不支持Servlet/JSP的HTTP服务器，可以通过tomcat服务器来运行Servlet/JSP组件
+
+1，配置tomcat
+
+tomcat1服务的配置
+<Connector port="8895" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8943" URIEncoding="UTF-8"/>
+tomcat2服务的配置
+<Connector port="8094" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" URIEncoding="UTF-8"/>
+
+2，nginx配置
+
+nginx对tomcat1的配置
+server {
+    listen       80;
+    server_name  admin.hutour.com.cn;
+        #index index_ds.html index.html index.htm index.jsp;
+        index index.html index.htm index.php;
+    charset utf-8;
+
+    ssi on;
+    ssi_silent_errors on;
+
+    location / {
+        proxy_connect_timeout      45s;
+        proxy_send_timeout         120s;
+        proxy_read_timeout         120s;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-fo $remote_addr;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:8895;
+     }
+}
+
+nginx对tomcat2的配置
+server {
+    listen       80;    
+   server_name  www.hutour.com.cn;
+        index index_ds.html index.html index.htm index.jsp;
+    charset utf-8;
+
+    ssi on;
+    ssi_silent_errors on;
+    
+    location ~ ^/(WEB-INF)/ {
+        deny all;
+    }
+
+    location / {
+        proxy_connect_timeout      45s;
+        proxy_send_timeout         120s;
+        proxy_read_timeout         120s;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-fo $remote_addr;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:8094;
+     }
