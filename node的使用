@@ -3,10 +3,22 @@
 
 1，第一步就是安装node，下载后一路next就可以了，然后在path中会自动写入nodejs的路径(不记得是自己配置的还是)
 2，后来发现在系统环境变量中有一个NODE_PATH(我的是C:\Users\Administrator\AppData\Roaming\npm\node_modules;)，
-  这个我还是记不清是自己配制的还是安装的时候系统写入的。
+  这个我还是记不清是自己配制的还是安装的时候系统写入的(在新的pc上安装后发现没有NODE_PATH这个东西)。
 3，npm这个包管理器在node后续高版本的时候会自动安装进来。
 4，每个项目最后通过npm依赖包后导致npm依赖包过大或重复。所以通过全局安装依赖包是较好的一种策略。
 5，怎样全局安装?查阅了下资料:把NODE_PATH设置为全局安装目录即可。经过测试发现并没什么卵用。
 6，又查阅了下在linux上设置全局安装路径方法，同样在cmd下可行:npm config set prefix D:\nodejs\node_global
   然后:npm root -g 发现这个还是没什么卵用，当我在路径上加双引号后可行。
 7，从此:npm install -g  xxx(模块) 所有模块安装都会在上面设置的全局路径下的node_modules目录下。
+
+
+#######################################################
+在nodejs\node_modules\npm目录下的.nmprc文件中
+prefix=${APPDATA}\nmp
+这个就应该是npm指定的全局安装路径。这也就是为什么在不修改pref的配置时npm install -g 安装的所有的包都在C:users\administrator\appdata\roaming\nmp\node_modules目录下了
+
+我的.nmprc文件内容目前是
+save-prefix = ~
+proprietary-attribs = false
+这样子。后面在研究
+########################################################
