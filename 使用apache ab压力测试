@@ -83,3 +83,8 @@ Total transferred / Time taken for tests
 
 Percentage of the requests served within a certain time(ms)
 这部分数据用于描述每个请求处理时间的分布情况，比如在以上测试结果中，80%请求的处理时间都不超过1ms，而99%的请求都不超过2ms。注意这里的处理时间，是指前面的Time per request，即对于单个用户而言，平均每个请求处理的时间。 
+
+
+所用时间：102.313秒
+平均每秒请求次数：9.77次
+平均每次请求所用时间：1023.129毫秒
