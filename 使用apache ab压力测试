@@ -1,0 +1,85 @@
+在Apache的httpserver里面自带了ab压力测试
+下面通过一个测试来说明
+测试目的:测试服务器的处理时间，不包含数据的网络传输时间以及用户pc本地计算时间。
+ad可以直接从WEB服务器本地发起测试请求。ab进行一切测试的本质都是基于HTTP，
+所以可以说它是对于Web服务器软件的黑盒性能测试，它获得的一切数据和计算结果，都可以通过HTTP来解释。
+现在测试一个请求数是1000 ，并发为10
+D:\xampp\apache\bin>ab -n 1000 -c 10 http://www.hutour.com.cn/
+
+This is ApacheBench, Version 2.3 <$Revision: 1706008 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking www.hutour.com.cn (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:
+Server Hostname:        www.hutour.com.cn
+Server Port:            80
+
+Document Path:          /
+Document Length:        18440 bytes
+
+Concurrency Level:      10
+Time taken for tests:   102.313 seconds
+Complete requests:      1000
+Failed requests:        2
+   (Connect: 2, Receive: 0, Length: 0, Exceptions: 0)
+Total transferred:      18984000 bytes
+HTML transferred:       18440000 bytes
+Requests per second:    9.77 [#/sec] (mean)
+Time per request:       1023.129 [ms] (mean)
+Time per request:       102.313 [ms] (mean, across all concurrent requests)
+Transfer rate:          181.20 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       24   46 300.1     30    9036
+Processing:   185  929 2921.1    332   21480
+Waiting:      158  593 2333.5    211   21216
+Total:        211  975 2933.2    368   21513
+
+Percentage of the requests served within a certain time (ms)
+  50%    368
+  66%    463
+  75%    599
+  80%    657
+  90%    842
+  95%   2175
+  98%   9345
+  99%  21322
+ 100%  21513 (longest request)
+ 
+ 
+Requests per second:表示吞吐率，它等与Complete requests / Time taken for tests
+
+Time per request
+这便是前面提到的用户平均请求等待时间，它等于:
+Time taken for tests / (Complete requests /Concurrency Level)
+
+Time per request?(across all concurrent requests)
+这便是前面提到的服务器平均请求处理时间，它等于：
+Time taken for tests / Complete requests
+
+这正是吞吐率的倒数。同时，它也等于：
+Time per request / Concurrency Level
+
+Transfer rate
+表示这些请求在单位时间内从服务器获取的数据长度，它等于：
+Total transferred / Time taken for tests
+这个统计项可以很好的说明服务器在处理能力达到限制时，其出口带宽的需求量。
+利用前面介绍的有关带宽的知识，不难计算出结果。
+
+Percentage of the requests served within a certain time(ms)
+这部分数据用于描述每个请求处理时间的分布情况，比如在以上测试结果中，80%请求的处理时间都不超过1ms，而99%的请求都不超过2ms。注意这里的处理时间，是指前面的Time per request，即对于单个用户而言，平均每个请求处理的时间。 
