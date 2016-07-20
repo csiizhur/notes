@@ -1,0 +1,35 @@
+同时运行多个Tomcat
+
+首先，要配每个Tomcat的三个port口都要不同
+
+在server.xml文件下找到下面个port口
+
+tomcat1:
+
+<Server port="8072" shutdown="SHUTDOWN">
+
+<Connector port="8092" protocol="HTTP/1.1"  connectionTimeout="20000"  redirectPort="8443" />
+
+<Connector port="8007" protocol="AJP/1.3" redirectPort="8443" />
+
+
+tomcat2:
+
+<Server port="8071" shutdown="SHUTDOWN">
+
+<Connector port="8091" protocol="HTTP/1.1"  connectionTimeout="20000"  redirectPort="8443" />
+
+<Connector port="8008" protocol="AJP/1.3" redirectPort="8443" />
+
+
+然后设置两个环境变量：JAVA_HOME（指向jdk）
+
+
+最后就可以起动两个Tomcat了。
+
+
+
+内存溢出之Tomcat内存配置
+
+在catalina.bat第一行添加
+set JAVA_OPTS=-Xms512m -Xmx512m
