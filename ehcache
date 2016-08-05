@@ -1,3 +1,11 @@
+#mybatis其实跟Hibernate一样，一级缓存默认是开启
+因为他们缓存级别都是session级别的，所以在session没关闭下，根据SQL的key作为缓存，同一sql执行三次后的日志如下
+[DEBUG][2016-08-05 17:18:11,609][java.sql.Connection]==>  Preparing: select * from portal_article where is_del!=1 and id=? 
+[DEBUG][2016-08-05 17:18:11,952][java.sql.PreparedStatement]==> Parameters: 1(Integer)
+[INFO][2016-08-05 17:18:12,079][springtest.CacheTest]com.lanen.wechat.pojo.Article@598bd2ba
+[INFO][2016-08-05 17:18:12,081][springtest.CacheTest]com.lanen.wechat.pojo.Article@598bd2ba
+[INFO][2016-08-05 17:18:12,082][springtest.CacheTest]com.lanen.wechat.pojo.Article@598bd2ba
+
 #mybatis+ehcache
 
 <!-- 使用ehcache缓存 -->
