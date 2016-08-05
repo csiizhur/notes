@@ -1,0 +1,38 @@
+#mybatis+ehcache
+
+<!-- 使用ehcache缓存 -->
+    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:/xml/ehcache.xml" />
+    </bean>
+    
+在需要使用的mapper上配置 useCache="true"表示使用ehcache的缓存
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+	<select id="getHotArticles" resultMap="articleMap" useCache="true">
+		select * from portal_article where is_del!=1
+	</select>
+
+        long begTime=System.nanoTime();
+        articleDao2.getHotArticles();
+        long endTime=System.nanoTime();
+        log.info("第一次查询耗时"+(endTime-begTime));//第一次查询耗时54165474
+        articleDao2.getHotArticles();
+        long endTime2=System.nanoTime();
+        log.info("第二次查询耗时"+(endTime2-endTime));	
+[DEBUG][2016-08-05 16:57:59,592][java.sql.Connection]==>  Preparing: select * from portal_article where is_del!=1 
+[DEBUG][2016-08-05 16:57:59,927][java.sql.PreparedStatement]==> Parameters: 
+[DEBUG][2016-08-05 16:58:00,030][org.springframework.jdbc.datasource.DataSourceUtils]Returning JDBC Connection to DataSource
+[INFO][2016-08-05 16:58:00,031][springtest.CacheTest]第一次查询耗时575242385
+[INFO][2016-08-05 16:58:00,034][springtest.CacheTest]第二次查询耗时2725556
+
+可以看出ehcache的缓存起作用了，并且第二次查询，并没有发出sql语句。
+如果将useCache="false",则是这样
+[DEBUG][2016-08-05 17:04:21,135][java.sql.Connection]==>  Preparing: select * from portal_article where is_del!=1 
+[DEBUG][2016-08-05 17:04:21,488][java.sql.PreparedStatement]==> Parameters: 
+[DEBUG][2016-08-05 17:04:21,606][org.springframework.jdbc.datasource.DataSourceUtils]Returning JDBC Connection to DataSource
+[INFO][2016-08-05 17:04:21,607][springtest.CacheTest]第一次查询耗时761002097
+[DEBUG][2016-08-05 17:04:21,608][org.springframework.jdbc.datasource.DataSourceUtils]Fetching JDBC Connection from DataSource
+[DEBUG][2016-08-05 17:04:21,609][java.sql.Connection]ooo Using Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@11f0a5a1]
+[DEBUG][2016-08-05 17:04:21,609][java.sql.Connection]==>  Preparing: select * from portal_article where is_del!=1 
+[DEBUG][2016-08-05 17:04:21,610][java.sql.PreparedStatement]==> Parameters: 
+[DEBUG][2016-08-05 17:04:21,626][org.springframework.jdbc.datasource.DataSourceUtils]Returning JDBC Connection to DataSource
+[INFO][2016-08-05 17:04:21,627][springtest.CacheTest]第二次查询耗时19756002
