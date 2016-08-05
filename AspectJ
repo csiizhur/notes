@@ -1,0 +1,51 @@
+#前置Advisor
+
+proxy-target-class="true" 标识基于类的代理被创建
+另外的则是JDK接口代理
+<aop:config proxy-target-class="true">
+			<aop:advisor advice-ref="testAdvisor" pointcut="execution(* com.lanen.wechat.service.TestService.*(..))" />	
+</aop:config>
+<bean id="testAdvisor" class="com.lanen.web.advisor.TestAdvisor"></bean>
+
+  @Override
+	public void before(Method method, Object[] args, Object target)
+			throws Throwable {
+		log.info("进入advisor前置");
+		log.info("advisor接收到第一个参数："+args[0]);
+		log.info("advisor接收到第二个参数："+args[1]);
+	}
+
+#使用spring事物
+<!-- 拦截器方式配置事物 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 定义一个切面,在定义的切面上加入事物 -->
+	<aop:config>
+		<aop:pointcut id="transactionPointcut"
+			expression="execution(* com.lanen.wechat.service.*Service.*(..))" />
+		<aop:advisor pointcut-ref="transactionPointcut"
+			advice-ref="transactionAdvice" />
+	</aop:config>
+	
+新建一个transaction-->进入advisor-->service-->commit transaction
+[DEBUG][2016-08-05 18:09:41,855][org.springframework.jdbc.datasource.DataSourceTransactionManager]Creating new transaction with name [com.lanen.wechat.service.TestService.addLogon]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+[DEBUG][2016-08-05 18:09:41,859][org.springframework.jdbc.datasource.DataSourceTransactionManager]Acquired Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@2b4157d6] for JDBC transaction
+[DEBUG][2016-08-05 18:09:41,884][org.springframework.jdbc.datasource.DataSourceTransactionManager]Switching JDBC Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@2b4157d6] to manual commit
+[INFO][2016-08-05 18:09:41,887][com.lanen.web.advisor.TestAdvisor]进入advisor前置
+[INFO][2016-08-05 18:09:41,887][com.lanen.web.advisor.TestAdvisor]advisor接收到第一个参数：ww
+[INFO][2016-08-05 18:09:41,887][com.lanen.web.advisor.TestAdvisor]advisor接收到第二个参数：ww
+[DEBUG][2016-08-05 18:09:42,350][java.sql.Connection]ooo Using Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@2b4157d6]
+[DEBUG][2016-08-05 18:09:42,363][java.sql.Connection]==>  Preparing: insert into portal_article(tag,author) values( ?, ? ) 
+[DEBUG][2016-08-05 18:09:42,758][java.sql.PreparedStatement]==> Parameters: ww(String), ww(String)
+[DEBUG][2016-08-05 18:09:42,784][java.sql.Connection]ooo Using Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@2b4157d6]
+[DEBUG][2016-08-05 18:09:42,785][java.sql.Connection]==>  Preparing: insert into portal_article(tag,author) values( ?, ? ) 
+[DEBUG][2016-08-05 18:09:42,785][java.sql.PreparedStatement]==> Parameters: 1(String), or(String)
+[DEBUG][2016-08-05 18:09:42,787][java.sql.Connection]ooo Using Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@2b4157d6]
+[DEBUG][2016-08-05 18:09:42,788][java.sql.Connection]==>  Preparing: insert into portal_article(tag,author) values( ?, ? ) 
+[DEBUG][2016-08-05 18:09:42,789][java.sql.PreparedStatement]==> Parameters: ww(String), ww(String)
+[DEBUG][2016-08-05 18:09:42,791][org.springframework.jdbc.datasource.DataSourceTransactionManager]Initiating transaction commit
+[DEBUG][2016-08-05 18:09:42,791][org.springframework.jdbc.datasource.DataSourceTransactionManager]Committing JDBC transaction on Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@2b4157d6]
