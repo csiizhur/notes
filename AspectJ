@@ -3,11 +3,11 @@
 proxy-target-class="true" 标识基于类的代理被创建
 另外的则是JDK接口代理
 <aop:config proxy-target-class="true">
-			<aop:advisor advice-ref="testAdvisor" pointcut="execution(* com.lanen.wechat.service.TestService.*(..))" />	
+	<aop:advisor advice-ref="testAdvisor" pointcut="execution(* com.lanen.wechat.service.TestService.*(..))" />	
 </aop:config>
 <bean id="testAdvisor" class="com.lanen.web.advisor.TestAdvisor"></bean>
 
-  @Override
+        @Override
 	public void before(Method method, Object[] args, Object target)
 			throws Throwable {
 		log.info("进入advisor前置");
@@ -16,7 +16,7 @@ proxy-target-class="true" 标识基于类的代理被创建
 	}
 
 #使用spring事物
-<!-- 拦截器方式配置事物 -->
+        <!-- 拦截器方式配置事物 -->
 	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="add*" propagation="REQUIRED" />
@@ -49,3 +49,6 @@ proxy-target-class="true" 标识基于类的代理被创建
 [DEBUG][2016-08-05 18:09:42,789][java.sql.PreparedStatement]==> Parameters: ww(String), ww(String)
 [DEBUG][2016-08-05 18:09:42,791][org.springframework.jdbc.datasource.DataSourceTransactionManager]Initiating transaction commit
 [DEBUG][2016-08-05 18:09:42,791][org.springframework.jdbc.datasource.DataSourceTransactionManager]Committing JDBC transaction on Connection [com.alibaba.druid.proxy.jdbc.ConnectionProxyImpl@2b4157d6]
+
+当然如果使用注解方式配置事物，<tx:annotation-driven transaction-manager="transactionManager" /> 则在service中需要事物的方法上加
+@Transactional注解
