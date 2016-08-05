@@ -1,0 +1,70 @@
+进行junit单元测试时，往往需要通过日志，查看用例结果信息，但是怎样让他去加载log4j(因为在项目中log4j会放在web.xml中)
+
+当junit没有加载到log4j时，会出现
+log4j:WARN No appenders could be found for logger (org.springframework.test.context.junit4.SpringJUnit4ClassRunner).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+test里面的信息也不会打印出来。
+
+比较优雅的一种方式就是自定义一个Junit4ClassRunner来继承SpringJUnit4ClassRunner,他主要就是去加载我们的log4j
+
+public class Junit4ClassRunner extends SpringJUnit4ClassRunner {
+
+	static{
+		try {
+			Log4jConfigurer.initLogging("src/main/resources/properties/log4j.properties");
+		} catch (FileNotFoundException e) {
+			System.err.println("log4j初始化失败");
+		}
+	}
+	
+	public Junit4ClassRunner(Class<?> clazz) throws InitializationError {
+		super(clazz);
+	}
+
+}
+
+至此log4j的加载已经好了，我们只需要在我们的测试类注解我们刚刚实现的自定义加载dlog4j的类，而不是SpringJUnit4ClassRunner.class
+@RunWith(Junit4ClassRunner.class)
+@ContextConfiguration({"classpath:xml/spring-dao.xml"})
+public class CacheTest {
+
+	
+	private Logger log=LoggerFactory.getLogger(CacheTest.class);
+	
+	@Autowired
+	private SqlSessionFactory sqlSessionFactory;
+	
+	private SqlSession sqlSession;
+	@Before
+	public void before(){
+		sqlSession=sqlSessionFactory.openSession();
+	}
+	
+	@After
+	public void after(){
+		sqlSession.close();
+	}
+	
+	@Test
+	public void mybatisCache(){
+	  。。。
+	}
+}
+
+现在，我们就能通过他看到log4j打印出来的sql语句，事物的commit,和缓存是否起作用的测试信息了。
+
+如果你用的是mybatis,你需要在log4j中配置mybatis的sql打印信息
+log4j.logger.com.ibatis=DEBUG
+log4j.logger.com.ibatis.common.jdbc.SimpleDataSource=DEBUG
+log4j.logger.com.ibatis.common.jdbc.ScriptRunner=DEBUG
+log4j.logger.com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate=DEBUG
+log4j.logger.java.sql.Connection=DEBUG
+log4j.logger.java.sql.Statement=DEBUG
+log4j.logger.java.sql.PreparedStatement=DEBUG
+
+当然Hibernate自身可以通过自己的配置文件是否开启
+
+ps:如果需要看事物日志，貌似需要
+log4j.logger.org.springframework=debug,console
+log4j.logger.org.springframework.transaction=debug,console
