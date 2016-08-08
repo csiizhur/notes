@@ -48,3 +48,10 @@
 [DEBUG][2016-08-05 17:04:21,610][java.sql.PreparedStatement]==> Parameters: 
 [DEBUG][2016-08-05 17:04:21,626][org.springframework.jdbc.datasource.DataSourceUtils]Returning JDBC Connection to DataSource
 [INFO][2016-08-05 17:04:21,627][springtest.CacheTest]第二次查询耗时19756002
+
+#mybatis+redis
+将redis安装在virtualBox虚拟的centos7上发现程序并不能通过ip+port访问redis
+https://github.com/dmajkic/redis/downloads 下载weindows版本的redis
+1,首先启动redis服务redis-server.exe redis.conf
+2,自定义一个MybatisRedisCache并且实现Cache接口
+3,在需要缓存的mapper中加入<cache eviction="LRU" type="com.lanen.wechat.cache.MybatisRedisCache"/>即可
