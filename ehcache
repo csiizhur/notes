@@ -6,8 +6,12 @@
 [INFO][2016-08-05 17:18:12,081][springtest.CacheTest]com.lanen.wechat.pojo.Article@598bd2ba
 [INFO][2016-08-05 17:18:12,082][springtest.CacheTest]com.lanen.wechat.pojo.Article@598bd2ba
 
-#mybatis+ehcache
+#mybatis开启二级缓存(PerpetualCache)
+开启自身二级缓存只需要操作两步
+1，在mybatis-config.xml中加上<setting name="cacheEnabled" value="true"/>
+2，在需要加入缓存的sqlMap中加入<cache eviction="LRU" flushInterval="60000" size="512" readOnly="true"/>
 
+#mybatis+ehcache
 <!-- 使用ehcache缓存 -->
     <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:/xml/ehcache.xml" />
