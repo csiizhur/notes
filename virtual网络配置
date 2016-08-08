@@ -1,4 +1,47 @@
+使用VirtualBox虚拟centOS，我在网络和主机名界面设置的是ipv4-->DHCP自动
 
+安装完毕后使用yum install net-tools 安装ifconfig
 
+[root@localhost ~]# ifconfig
+enp0s3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255
+        inet6 fe80::a00:27ff:fe87:e803  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:87:e8:03  txqueuelen 1000  (Ethernet)
+        RX packets 312  bytes 331705 (323.9 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 137  bytes 14056 (13.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
+enp0s8: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.56.103  netmask 255.255.255.0  broadcast 192.168.56.255
+        inet6 fe80::a00:27ff:fecb:e073  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:cb:e0:73  txqueuelen 1000  (Ethernet)
+        RX packets 19  bytes 2535 (2.4 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 16  bytes 1724 (1.6 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 0  (Local Loopback)
+        RX packets 10  bytes 840 (840.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 10  bytes 840 (840.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+我在启动时候选择了网卡连接方式网络地址转换(NAT)和仅主机(Host_Only)适配器两种
+而NAT我是配置了端口转发
+因此可以通过ssh root@127.0.0.1 9023(端口)
+            ssh root@192.168.56.103远程连接虚机
+            
+后来发现  网卡enp0s3的ip也是能ssh连接的          
+[root@localhost ~]# ssh root@10.0.2.15
+The authenticity of host '10.0.2.15 (10.0.2.15)' can't be established.
+ECDSA key fingerprint is 53:e7:76:df:20:b1:db:99:90:c1:13:9a:d6:63:a2:13.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.0.2.15' (ECDSA) to the list of known hosts.
+
+root@10.0.2.15's password: 
+Last login: Mon Aug  8 16:50:26 2016 from 192.168.56.1
+[root@localhost ~]# 
