@@ -52,6 +52,6 @@
 #mybatis+redis
 将redis安装在virtualBox虚拟的centos7上发现程序并不能通过ip+port访问redis
 https://github.com/dmajkic/redis/downloads 下载weindows版本的redis
-1,首先启动redis服务redis-server.exe redis.conf
+1,首先启动redis服务redis-server.exe redis.conf            (查看redis是否在运行:redis-cli.exe -h 127.0.0.1 -p 6379)
 2,自定义一个MybatisRedisCache并且实现Cache接口
 3,在需要缓存的mapper中加入<cache eviction="LRU" type="com.lanen.wechat.cache.MybatisRedisCache"/>即可
