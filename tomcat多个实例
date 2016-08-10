@@ -33,3 +33,12 @@ tomcat2:
 
 在catalina.bat第一行添加
 set JAVA_OPTS=-Xms512m -Xmx512m
+
+单实例多应用，通常会出现这样的错误
+java.lang.IllegalStateException: Web app root system property already set to different value: 'webapp.root' = [/home/cpeaanc2plegaba/wwwroot/wechat-server/] instead of [/home/cpeaanc2plegaba/wwwroot/mp_portal/] - Choose unique values for the 'webAppRootKey' context-param in your web.xml files!
+
+此时我们只需要在web.xml中配置每个应用的webAppRootKey确认key不重复
+<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>wechat-server.root</param-value>
+</context-param>
