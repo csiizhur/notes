@@ -4,5 +4,5 @@
 1. $ git add .
 2. $ git commit -m 'update'
 3. $ git push
-### Markdown——入门指南
+### Markdown入门指南
 	http://www.jianshu.com/p/1e402922ee32/
