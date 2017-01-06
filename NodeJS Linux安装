@@ -1,0 +1,21 @@
+1，下载编译好的二进制文件
+	wget https://nodejs.org/dist/v4.4.4/node-v4.4.4-linux-x64.tar.xz
+2，解压缩tar.xz文件
+	tar -Jxv -f node-v4.4.4-linux-x64.tar.xz
+3，解压成功之后即是可以运行的二进制文件，只需要为node何npm建立两个软连接，使之可以全局运行即可(即设置全局变量)
+	[root@iZuf6ayj54m6qqykp29r2bZ opt]# ln -s /opt/node-v6.9.1-linux-x64/bin/node /usr/local/bin/node
+	[root@iZuf6ayj54m6qqykp29r2bZ opt]# ln -s /opt/node-v6.9.1-linux-x64/bin/npm /usr/local/bin/npm
+
+
+	 xz -d node-v6.9.1-linux-x64.tar.xz
+	 tar -xvf node-v6.9.1-linux-x64.tar
+
+	注：下载下来的文件是node-v6.9.1-linux-x64.tar.xz，而对于.tar.xz的文件解压方法如下：
+
+   		xz -d node-v6.9.1-linux-x64.tar.xz
+
+	这个命令运行之后，node-v6.9.1-linux-x64.tar.xz变为了node-v6.9.1-linux-x64.tar，之后再用
+
+   		tar -xvf node-v6.9.1-linux-x64.tar
+
+	运行上述命令之后，就能生成一个node-v6.9.1-linux-x64文件夹，解压成功。
