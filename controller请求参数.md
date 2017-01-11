@@ -4,7 +4,6 @@
 2. 表单或者QueryString形式。应使用spring mvc自身的内置日期处理。
 ### 普通类型请求数据
 1.先使用@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")在Controller的方法参数或VO的属性使用.
-
 2.如果 不使用mvc:annotation-driven ,那么使用数据绑定来处理@DateTimeFormat这样的注解.配置例子如下:
 	`<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>   
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">   
