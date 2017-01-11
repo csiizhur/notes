@@ -1,3 +1,123 @@
+#使用springmvc全局处理返回的json日期为Long的解决方案
+```xml
+<mvc:annotation-driven>  
+    <!-- 处理responseBody 里面日期类型 -->  
+        <mvc:message-converters>  
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+                <property name="objectMapper">  
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">  
+                        <property name="dateFormat">  
+                            <bean class="java.text.SimpleDateFormat">  
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />  
+                            </bean>  
+                        </property>  
+                    </bean>  
+                </property>  
+            </bean>  
+        </mvc:message-converters>  
+    </mvc:annotation-driven>
+```
+#表单提交
+* 表单提交之数据转换-Date类型
+在实体类的属性或get方法上加入 @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")，那么表单中的日期字符串就会正确的转换为Date类型了。
+还有@NumberFormat注解，暂时没用，就不介绍了，一看就知道是对数字转换用的。
+#多格式Date类型
+json工具类：
+```java
+/** 
+ * json处理工具类 
+ * @author zhangle 
+ */  
+@Component  
+public class JsonUtil {  
+        private static final String DEFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";  
+        private static final ObjectMapper mapper;  
+          
+        public ObjectMapper getMapper() {  
+                return mapper;  
+        }  
+  
+        static {  
+                SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT);  
+                  
+                mapper = new ObjectMapper();  
+                mapper.setDateFormat(dateFormat);  
+                mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector() {  
+                        @Override  
+                        public Object findSerializer(Annotated a) {  
+                                if(a instanceof AnnotatedMethod) {  
+                                        AnnotatedElement m=a.getAnnotated();  
+                                        DateTimeFormat an=m.getAnnotation(DateTimeFormat.class);  
+                                        if(an!=null) {  
+                                                if(!DEFAULT_DATE_FORMAT.equals(an.pattern())) {  
+                                                        return new JsonDateSerializer(an.pattern());  
+                                                }  
+                                        }  
+                                }  
+                                return super.findSerializer(a);  
+                        }  
+                });  
+        }  
+          
+        public static String toJson(Object obj) {  
+                try {  
+                        return mapper.writeValueAsString(obj);  
+                } catch (Exception e) {  
+                        throw new RuntimeException("转换json字符失败!");  
+                }  
+        }  
+          
+        public <T> T toObject(String json,Class<T> clazz) {  
+                try {  
+                        return mapper.readValue(json, clazz);  
+                } catch (IOException e) {  
+                        throw new RuntimeException("将json字符转换为对象时失败!");  
+                }  
+        }  
+          
+        public static class JsonDateSerializer extends JsonSerializer<Date>{  
+            private SimpleDateFormat dateFormat;  
+            public JsonDateSerializer(String format) {  
+                 dateFormat = new SimpleDateFormat(format);  
+                }  
+              
+            @Override  
+            public void serialize(Date date, JsonGenerator gen, SerializerProvider provider)  
+                    throws IOException, JsonProcessingException {  
+                String value = dateFormat.format(date);  
+                gen.writeString(value);  
+            }  
+        }  
+}
+```
+再将<mvc:annotation-driven/>改为以下配置，配置一个新的json转换器，将它的ObjectMapper对象设置为JsonUtil中的objectMapper对象，此转换器比spring内置的json转换器优先级更高，所以与json有关的转换，spring会优先使用它。
+```xml
+<mvc:annotation-driven>  
+    <mvc:message-converters>  
+        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+            <property name="objectMapper" value="#{jsonUtil.mapper}"/>  
+            <property name="supportedMediaTypes">  
+                <list>  
+                    <value>text/json;charset=UTF-8</value>  
+                </list>  
+            </property>    
+        </bean>  
+    </mvc:message-converters>  
+</mvc:annotation-driven>
+```
+接下来就可以这样配置实体类，jackson也能正确转换Date类型
+```java
+@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+public Date getCreateTime() {  
+    return this.createTime;  
+}  
+@DateTimeFormat(pattern="yyyy-MM-dd")  
+public Date getBirthday() {  
+    return this.birthday;  
+} 
+```
+* ps:jackson也有一个@JsonFormat注解，将它配置到Date类型的get方法上后，jackson就会按照配置的格式转换日期类型，而不自定义转换器类
+
 #SpringMvc不使用mvc:annotation-driven
 ##controller的时间类型参数接收
 1.@RequestBody形式，即将参数写进请求体里面，使用application/json这样的的mediaType发请求。应使用Jackson的序列化和反序列化来处理。
