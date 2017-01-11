@@ -119,11 +119,11 @@ public Date getBirthday() {
 
 #SpringMvc不使用mvc:annotation-driven
 ##controller的时间类型参数接收
-1.@RequestBody形式，即将参数写进请求体里面，使用application/json这样的的mediaType发请求。应使用Jackson的序列化和反序列化来处理。
-2.表单或者QueryString形式。应使用spring mvc自身的内置日期处理。
+1. @RequestBody形式，即将参数写进请求体里面，使用application/json这样的的mediaType发请求。应使用Jackson的序列化和反序列化来处理。
+2. 表单或者QueryString形式。应使用spring mvc自身的内置日期处理。
 ###普通类型请求数据
-1.先使用@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")在Controller的方法参数或VO的属性使用.
-2.如果不使用mvc:annotation-driven,那么使用数据绑定来处理@DateTimeFormat这样的注解.配置例子如下:
+* 先使用@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")在Controller的方法参数或VO的属性使用.
+* 如果不使用mvc:annotation-driven,那么使用数据绑定来处理@DateTimeFormat这样的注解.配置例子如下:
 ```xml
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>   
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">   
@@ -150,7 +150,7 @@ public Date getBirthday() {
 ```
 ###Json类型的请求数据
 * 可以扩展 JsonSerializer，来实现一个格式化时间的DateJsonSerializer，并在注解中引用这个类
-1.继承定义序列化和反序列化类.例子:
+* 继承定义序列化和反序列化类.例子:
 ```java
 public class DateJsonSerializer  extends  JsonSerializer<Date> {  
      public static final SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
@@ -172,9 +172,9 @@ public class DateJsonDeserializer  extends  JsonDeserializer<Date> {
         }  
     }  
 }
-* 在Jackson2中增加的注解 @JsonFormat 可以方便的格式化时间字段。（Jackson的@JsonFormat的使用）
 ```
-2.在VO使用@JsonSerialize(using = DateJsonSerializer.class)和@JsonDeserialize(using = DateJsonDeserializer.class)注解(属性或方法都可以,序列化标注在get方法,反序列化标注在set方法).
+* 在Jackson2中增加的注解 @JsonFormat 可以方便的格式化时间字段。（Jackson的@JsonFormat的使用）
+* 在VO使用@JsonSerialize(using = DateJsonSerializer.class)和@JsonDeserialize(using = DateJsonDeserializer.class)注解(属性或方法都可以,序列化标注在get方法,反序列化标注在set方法).
 用于序列化和反序列化的注解类：@JsonSerialize和@JsonDeserialize
 ```java
 //注意：该类要实现 java.io.Serializable
@@ -217,7 +217,7 @@ public class TimestampConverter implements Converter<String, Timestamp> {
     }
 }
 ```
-注册到spring管理中
+* 注册到spring管理中
 ```java
 @Configuration
 public class WebMvcConfig{
