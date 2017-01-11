@@ -21,6 +21,7 @@
 * 表单提交之数据转换-Date类型
 在实体类的属性或get方法上加入 @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")，那么表单中的日期字符串就会正确的转换为Date类型了。
 还有@NumberFormat注解，暂时没用，就不介绍了，一看就知道是对数字转换用的。
+
 #多格式Date类型
 json工具类：
 ```java
