@@ -1,8 +1,8 @@
-# SpringMvc不使用mvc:annotation-driven
-## controller的时间类型参数接收
-1. @RequestBody形式，即将参数写进请求体里面，使用application/json这样的的mediaType发请求。应使用Jackson的序列化和反序列化来处理。
-2. 表单或者QueryString形式。应使用spring mvc自身的内置日期处理。
-### 普通类型请求数据
+#SpringMvc不使用mvc:annotation-driven
+##controller的时间类型参数接收
+1.@RequestBody形式，即将参数写进请求体里面，使用application/json这样的的mediaType发请求。应使用Jackson的序列化和反序列化来处理。
+2.表单或者QueryString形式。应使用spring mvc自身的内置日期处理。
+###普通类型请求数据
 1.先使用@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")在Controller的方法参数或VO的属性使用.
 2.如果 不使用mvc:annotation-driven ,那么使用数据绑定来处理@DateTimeFormat这样的注解.配置例子如下:
 ```xml
@@ -29,7 +29,7 @@
 </bean>   
 <bean id="conversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
 ```
-### Json类型的请求数据
+###Json类型的请求数据
 1.继承定义序列化和反序列化类.例子:
 ```java
 public class DateJsonSerializer  extends  JsonSerializer<Date> {  
