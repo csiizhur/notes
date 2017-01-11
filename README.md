@@ -5,4 +5,4 @@
 2. $ git commit -m 'update'
 3. $ git push
 ###Markdown入门指南
-	http://www.jianshu.com/p/1e402922ee32/
+http://www.jianshu.com/p/1e402922ee32/
