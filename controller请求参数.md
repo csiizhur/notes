@@ -5,7 +5,7 @@
 ### 普通类型请求数据
 1.先使用@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")在Controller的方法参数或VO的属性使用.
 2.如果 不使用mvc:annotation-driven ,那么使用数据绑定来处理@DateTimeFormat这样的注解.配置例子如下:
-```
+```xml
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>   
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">   
 <property name="webBindingInitializer" >   
@@ -29,10 +29,9 @@
 </bean>   
 <bean id="conversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
 ```
-***
 ### Json类型的请求数据
 1.继承定义序列化和反序列化类.例子:
-`
+```java
 public class DateJsonSerializer  extends  JsonSerializer<Date> {  
      public   static   final  SimpleDateFormat format =  new  SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
      @Override   
@@ -40,8 +39,8 @@ public class DateJsonSerializer  extends  JsonSerializer<Date> {
         jsonGenerator.writeString(format.format(date));  
     }  
 }
-`
-`
+```
+```java
 public class  DateJsonDeserializer  extends  JsonDeserializer<Date> {  
      public   static   final  SimpleDateFormat format =  new  SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
      @Override   
@@ -53,10 +52,10 @@ public class  DateJsonDeserializer  extends  JsonDeserializer<Date> {
         }  
     }  
 }
-`  
+```
 2.在VO使用@JsonSerialize(using = DateJsonSerializer.class)和@JsonDeserialize(using = DateJsonDeserializer.class)注解(属性或方法都可以,序列化标注在get方法,反序列化标注在set方法).
-`
+```java
 @JsonSerialize(using = DateJsonSerializer.class)
 @JsonDeserialize(using = DateJsonDeserializer.class)
 private Date releaseDate;
-`
+```
