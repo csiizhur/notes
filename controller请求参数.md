@@ -84,7 +84,7 @@ public Converter<String, Date> addNewConvert() {
 }
 ```
 * SpringBoot controller接收时间类型2
-自定义Convert
+	自定义转换器Convert
 ```java
 public class TimestampConverter implements Converter<String, Timestamp> {
     @Override
@@ -208,4 +208,10 @@ public class Product {
         product = JSONObject.toJavaObject(JSONObject.parseObject(jsonStr), Product.class);  
         System.out.println(product.toString());  
     }
+```
+输出：
+```java
+转换为json:{"desc":"这是一个产品","name":"产品","price":"22.3"}  
+{"DESC":"这是一个产品","NAME":"产品","PRICE":"22.3"}  
+{"desc":"这是一个产品","name":"产品","price":"22.3"}  
 ```
