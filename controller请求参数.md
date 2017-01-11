@@ -8,24 +8,24 @@
 ```xml
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>   
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">   
-<property name="webBindingInitializer" >   
-<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">   
-<property name="conversionService" ref="conversionService"/>   
-</bean>   
-</property>   
-<property name="messageConverters">   
-<list>   
-<bean id="stringHttpMessageConverter" class = "org.springframework.http.converter.StringHttpMessageConverter"/>   
-<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">   
-<property name="supportedMediaTypes">   
-<list>   
-<value>application/json;charset=UTF-8</value>   
-<value>text/html;charset=UTF-8</value>   
-</list>   
-</property>   
-</bean>   
-</list>   
-</property>   
+	<property name="webBindingInitializer" >   
+		<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">   
+			<property name="conversionService" ref="conversionService"/>   
+		</bean>   
+	</property>   
+	<property name="messageConverters">   
+		<list>   
+			<bean id="stringHttpMessageConverter" class = "org.springframework.http.converter.StringHttpMessageConverter"/>   
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">   
+				<property name="supportedMediaTypes">   
+					<list>   
+						<value>application/json;charset=UTF-8</value>   
+						<value>text/html;charset=UTF-8</value>   
+					</list>   
+				</property>   
+			</bean>   
+		</list>   
+	</property>   
 </bean>   
 <bean id="conversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
 ```
@@ -33,22 +33,22 @@
 1.继承定义序列化和反序列化类.例子:
 ```java
 public class DateJsonSerializer  extends  JsonSerializer<Date> {  
-     public   static   final  SimpleDateFormat format =  new  SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
+     public static final SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
      @Override   
-     public   void  serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)  throws  IOException, JsonProcessingException {  
+     public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)  throws  IOException, JsonProcessingException {  
         jsonGenerator.writeString(format.format(date));  
     }  
 }
 ```
 ```java
-public class  DateJsonDeserializer  extends  JsonDeserializer<Date> {  
-     public   static   final  SimpleDateFormat format =  new  SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
+public class DateJsonDeserializer  extends  JsonDeserializer<Date> {  
+     public static final SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
      @Override   
-     public  Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)  throws  IOException, JsonProcessingException {  
+     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)  throws  IOException, JsonProcessingException {  
          try  {  
-             return  format.parse(jsonParser.getText());  
+             return format.parse(jsonParser.getText());  
         }  catch  (ParseException e) {  
-             throw   new  RuntimeException(e);  
+             throw new RuntimeException(e);  
         }  
     }  
 }
