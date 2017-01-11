@@ -59,3 +59,33 @@ public class DateJsonDeserializer  extends  JsonDeserializer<Date> {
 @JsonDeserialize(using = DateJsonDeserializer.class)
 private Date releaseDate;
 ```
+##SpringBoot controller接收时间类型无法映射到Date类型
+*spring 容器在启动的时候会把映射转化注册到容器里面。随着容器的启动而生效。有时候 会缺少我们所需要的映射这样的话我们就需要自己给容器添加一个bean 来完成我们自己的映射 :
+```java
+@Bean
+    public Converter<String, Date> addNewConvert() {
+        return new Converter<String, Date>() {
+            @Override
+            public Date convert(String source) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = null;
+                try {
+                    date = sdf.parse((String) source);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return date;
+            }
+        };
+    }
+```
+##返回json数据
+*在使用该架构的时候 我们发现有个8小时的时间差。
+   解决方案  在 application.properties 文件里面添加  
+```properties
+spring.jackson.time-zone=GMT+8
+```
+   如果 从controller  返回出来的时间数据需要直接成 固定的String 格式 需要在application.properties 添加如下配置
+```properties
+   spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+```
