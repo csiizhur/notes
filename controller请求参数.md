@@ -30,6 +30,7 @@
 <bean id="conversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
 ```
 ###Json类型的请求数据
+* 可以扩展 JsonSerializer，来实现一个格式化时间的DateJsonSerializer，并在注解中引用这个类
 1.继承定义序列化和反序列化类.例子:
 ```java
 public class DateJsonSerializer  extends  JsonSerializer<Date> {  
@@ -52,40 +53,159 @@ public class DateJsonDeserializer  extends  JsonDeserializer<Date> {
         }  
     }  
 }
+* 在Jackson2中增加的注解 @JsonFormat 可以方便的格式化时间字段。
 ```
 2.在VO使用@JsonSerialize(using = DateJsonSerializer.class)和@JsonDeserialize(using = DateJsonDeserializer.class)注解(属性或方法都可以,序列化标注在get方法,反序列化标注在set方法).
+用于序列化和反序列化的注解类：@JsonSerialize和@JsonDeserialize
 ```java
+//注意：该类必须实现 java.io.Serializable
 @JsonSerialize(using = DateJsonSerializer.class)
 @JsonDeserialize(using = DateJsonDeserializer.class)
 private Date releaseDate;
 ```
-##SpringBoot controller接收时间类型无法映射到Date类型
-*spring 容器在启动的时候会把映射转化注册到容器里面。随着容器的启动而生效。有时候 会缺少我们所需要的映射这样的话我们就需要自己给容器添加一个bean 来完成我们自己的映射 :
+##SpringBoot controller接收时间类型无法映射到Date类型（时区）
+* spring 容器在启动的时候会把映射转化注册到容器里面。随着容器的启动而生效。有时候会缺少我们所需要的映射这样的话我们就需要自己给容器添加一个bean 来完成我们自己的映射 :
 ```java
 @Bean
-    public Converter<String, Date> addNewConvert() {
-        return new Converter<String, Date>() {
-            @Override
-            public Date convert(String source) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = null;
-                try {
-                    date = sdf.parse((String) source);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return date;
+public Converter<String, Date> addNewConvert() {
+	return new Converter<String, Date>() {
+    	@Override
+        public Date convert(String source) {
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+            	date = sdf.parse((String) source);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        };
+            return date;
+    	}
+    };
+}
+```
+* SpringBoot controller接收时间类型2
+自定义Convert
+```java
+public class TimestampConverter implements Converter<String, Timestamp> {
+    @Override
+    public Timestamp convert(String s){
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        try {
+            ts = Timestamp.valueOf(s);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ts;
     }
+}
 ```
-##返回json数据
-*在使用该架构的时候 我们发现有个8小时的时间差。
-   解决方案  在 application.properties 文件里面添加  
-```properties
-spring.jackson.time-zone=GMT+8
+注册到spring管理中
+```java
+@Configuration
+public class WebMvcConfig{
+
+    @Autowired
+    private RequestMappingHandlerAdapter handlerAdapter;
+
+    /**
+     * 增加字符串转日期的功能
+     */
+    @PostConstruct
+    public void initEditableValidation() {
+        ConfigurableWebBindingInitializer initializer = (ConfigurableWebBindingInitializer) handlerAdapter
+                .getWebBindingInitializer();
+        if (initializer.getConversionService() != null) {
+            GenericConversionService genericConversionService = (GenericConversionService) initializer
+                    .getConversionService();
+            genericConversionService.addConverter(new TimestampConverter());
+        }
+
+    }
+}
 ```
-   如果 从controller  返回出来的时间数据需要直接成 固定的String 格式 需要在application.properties 添加如下配置
+##返回Jackson数据
+* 默认情况下Jackson将 Java.util.Date 序列化为 epoch timestamp，并且时区使用的是 GMT标准时间，而非本地时区。
+* 在使用该架构的时候 我们发现有个8小时的时间差。解决方案  在 application.properties 文件里面添加  
 ```properties
-   spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+	spring.jackson.time-zone=GMT+8
+```
+* 如果 从controller  返回出来的时间数据需要直接成 固定的String 格式 需要在application.properties 添加如下配置
+```properties
+	spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+```
+
+##使用Jackson的@JsonFormat注解时出现少一天
+```java
+@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd",timezone="GMT+8")
+public Date getRegistDate() {
+	return this.registDate;
+}
+```
+加上时区即可,中国是东八区
+
+##FastJson中@JSONField注解使用
+* FastJson在进行操作时，是根据getter和setter的方法进行的，并不是依据Field进行
+* 当作用在setter方法上时，就相当于根据 name 到 json中寻找对应的值，并调用该setter对象赋值。
+当作用在getter上时，在bean转换为json时，其key值为name定义的值。实例如下：
+```java
+public class Product {  
+  
+    private String productName;  
+    private String desc;  
+    private String price;  
+      
+    @JSONField(name="name")  
+    public String getProductName() {  
+        return productName;  
+    }  
+      
+    @JSONField(name="NAME")  
+    public void setProductName(String productName) {  
+        this.productName = productName;  
+    }  
+      
+    @JSONField(name="desc")  
+    public String getDesc() {  
+        return desc;  
+    }  
+      
+    @JSONField(name="DESC")  
+    public void setDesc(String desc) {  
+        this.desc = desc;  
+    }  
+      
+    @JSONField(name="price")  
+    public String getPrice() {  
+        return price;  
+    }  
+      
+    @JSONField(name="PRICE")  
+    public void setPrice(String price) {  
+        this.price = price;  
+    }  
+      
+    public String toString() {  
+        return JSONObject.toJSONString(this);  
+    }  
+      
+}
+```
+测试代码：
+```java
+@Test  
+    public void test() {  
+        Product product = new Product();  
+        product.setProductName("产品");  
+        product.setDesc("这是一个产品");  
+        product.setPrice("22.3");  
+          
+        String jsonStr = JSONObject.toJSONString(product);  
+        System.out.println("转换为json:" + JSONObject.toJSONString(product));  
+          
+        jsonStr = jsonStr.toUpperCase();  
+        System.out.println(jsonStr);  
+          
+        product = JSONObject.toJavaObject(JSONObject.parseObject(jsonStr), Product.class);  
+        System.out.println(product.toString());  
+    }
 ```
