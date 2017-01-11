@@ -18,16 +18,14 @@
     </mvc:annotation-driven>
 ```
 #表单提交
-* 表单提交之数据转换-Date类型
-在实体类的属性或get方法上加入 @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")，那么表单中的日期字符串就会正确的转换为Date类型了。
-还有@NumberFormat注解，暂时没用，就不介绍了，一看就知道是对数字转换用的。
+* 表单提交之数据转换-Date类型。在实体类的属性或get方法上加入 @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")，那么表单中的日期字符串就会正确的转换为Date类型了。还有@NumberFormat注解，暂时没用，就不介绍了，一看就知道是对数字转换用的。
 
 #多格式Date类型
 json工具类：
 ```java
 /** 
  * json处理工具类 
- * @author zhangle 
+ * @author zhur 
  */  
 @Component  
 public class JsonUtil {  
@@ -117,7 +115,7 @@ public Date getBirthday() {
     return this.birthday;  
 } 
 ```
-* ps:jackson也有一个@JsonFormat注解，将它配置到Date类型的get方法上后，jackson就会按照配置的格式转换日期类型，而不自定义转换器类
+* ps:jackson也有一个@JsonFormat注解，将它配置到Date类型的get方法上后，jackson就会按照配置的格式转换日期类型，而不自定义转换器类。（Jackson的@JsonFormat的使用）
 
 #SpringMvc不使用mvc:annotation-driven
 ##controller的时间类型参数接收
@@ -125,7 +123,7 @@ public Date getBirthday() {
 2.表单或者QueryString形式。应使用spring mvc自身的内置日期处理。
 ###普通类型请求数据
 1.先使用@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")在Controller的方法参数或VO的属性使用.
-2.如果 不使用mvc:annotation-driven ,那么使用数据绑定来处理@DateTimeFormat这样的注解.配置例子如下:
+2.如果不使用mvc:annotation-driven,那么使用数据绑定来处理@DateTimeFormat这样的注解.配置例子如下:
 ```xml
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>   
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">   
@@ -174,12 +172,12 @@ public class DateJsonDeserializer  extends  JsonDeserializer<Date> {
         }  
     }  
 }
-* 在Jackson2中增加的注解 @JsonFormat 可以方便的格式化时间字段。
+* 在Jackson2中增加的注解 @JsonFormat 可以方便的格式化时间字段。（Jackson的@JsonFormat的使用）
 ```
 2.在VO使用@JsonSerialize(using = DateJsonSerializer.class)和@JsonDeserialize(using = DateJsonDeserializer.class)注解(属性或方法都可以,序列化标注在get方法,反序列化标注在set方法).
 用于序列化和反序列化的注解类：@JsonSerialize和@JsonDeserialize
 ```java
-//注意：该类必须实现 java.io.Serializable
+//注意：该类要实现 java.io.Serializable
 @JsonSerialize(using = DateJsonSerializer.class)
 @JsonDeserialize(using = DateJsonDeserializer.class)
 private Date releaseDate;
@@ -204,8 +202,7 @@ public Converter<String, Date> addNewConvert() {
     };
 }
 ```
-* SpringBoot controller接收时间类型2
-	自定义转换器Convert
+* SpringBoot controller接收时间类型：自定义转换器Convert
 ```java
 public class TimestampConverter implements Converter<String, Timestamp> {
     @Override
