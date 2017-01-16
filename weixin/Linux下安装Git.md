@@ -6,20 +6,20 @@ CentOS release 5.11 (Final)
 ```
 CentOS5的时代，由于yum源中没有git，所以需要预先安装一系列的依赖包。但在CentOS6的yum源中已经有git的版本了，可以直接使用yum源进行安装。
 ```shell
-yum install git
+[root@iZ28j6jspynZ git-2.3.0]# yum install git
 ```
 
 ## 下载git源码编译安装
 1. 更新系统
-	```shell
+```shell
 yum update
 ```
 2. 安装依赖包
-	```shell
+```shell
 sudo yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker
 ```
 3. 下载git源码包并解压缩
-	```shell
+```shell
 $ wget https://github.com/git/git/archive/v2.3.0.zip
 $ unzip v2.3.0.zip
 $ cd git-2.3.0
