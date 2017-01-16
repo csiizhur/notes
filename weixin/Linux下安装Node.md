@@ -22,9 +22,9 @@ Saving to: `node-v0.11.7.tar.gz'
 ```
 3.编译安装
 ```shell
-[root@iZ28j6jspynZ node-v6.9.4]# ./configure
-[root@iZ28j6jspynZ node-v6.9.4]# make && make install
-[root@iZ28j6jspynZ node-v6.9.4]# cp /usr/local/bin/node /usr/sbin/
+[root@iZ28j6jspynZ node-v0.11.7]# ./configure
+[root@iZ28j6jspynZ node-v0.11.7]# make && make install
+[root@iZ28j6jspynZ node-v0.11.7]# cp /mnt/node-v0.11.7/bin/node /usr/sbin/
 ```
 这种通过源码编译安装发现安装过程中会出现各种错误。下面采用编译好的文件安装
 
@@ -40,12 +40,12 @@ xz文件格式文件需先解压成tar（yun源安装xz）
 [root@iZ28j6jspynZ ~]# yum search xz
 [root@iZ28j6jspynZ ~]# yum install xz.x86_64
 ```
-这样就可以使用xz命令来解压tar.xz格式文件了
+3.这样就可以使用xz命令来解压tar.xz格式文件了
 ```shell
 [root@iZ28j6jspynZ mnt]# xz -d node-v6.9.4-linux-x64.tar.xz
 [root@iZ28j6jspynZ mnt]#tar -xvf node-v6.9.4-linux-x64.tar
 ```
-3.解压完毕直接通过./node -v查看是否成功
+4.解压完毕直接通过./node -v查看是否成功
 ```shell
 [root@iZ28j6jspynZ mnt]# cd node-v6.9.4-linux-x64/bin/
 [root@iZ28j6jspynZ bin]# ls
@@ -54,7 +54,7 @@ node  npm
 v6.9.4
 [root@iZ28j6jspynZ bin]# 
 ```
-4.node全局设置
+5.node全局设置
 ```shell
 [root@iZ28j6jspynZ bin]# ln -s /mnt/node-v6.9.4-linux-x64/bin/node /usr/local/bin/node
 [root@iZ28j6jspynZ bin]# ln -s /mnt/node-v6.9.4-linux-x64/bin/npm /usr/local/bin/npm
