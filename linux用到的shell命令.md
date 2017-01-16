@@ -1,4 +1,68 @@
 #linux会用到的操作
+* Linux查看版本当前操作系统内核信息
+
+```shell
+[root@iZ28j6jspynZ git-2.3.0]# uname -a
+Linux iZ28j6jspynZ 2.6.18-371.11.1.el5 #1 SMP Wed Jul 23 15:12:55 EDT 2014 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+* Linux查看当前操作系统版本信息
+
+```shell
+[root@iZ28j6jspynZ git-2.3.0]# cat /proc/version
+Linux version 2.6.18-371.11.1.el5 (mockbuild@builder17.centos.org) (gcc version 4.1.2 20080704 (Red Hat 4.1.2-54)) #1 SMP Wed Jul 23 15:12:55 EDT 2014
+```
+
+* Linux查看版本当前操作系统发行版信息
+
+```shell
+[root@iZ28j6jspynZ git-2.3.0]# cat /etc/issue
+Aliyun Linux release 5.7
+Kernel \r on an \m
+[root@iZ28j6jspynZ git-2.3.0]# cat /etc/redhat-release
+CentOS release 5.11 (Final)
+[root@iZ28j6jspynZ git-2.3.0]# 
+```
+
+* yum源相关命令
+	1. 使用YUM查找软件包
+	命令：yum search 
+
+	2. 列出所有可安装的软件包 
+	命令：yum list 
+
+	3. 列出所有可更新的软件包 
+	命令：yum list updates 
+
+	4. 列出所有已安装的软件包 
+	命令：yum list installed
+ 
+	5. 列出所有已安装但不在 Yum Repository 内的软件包 
+	命令：yum list extras
+ 
+	6. 列出所指定的软件包 
+	命令：yum list
+ 
+	7. 使用YUM获取软件包信息 
+	命令：yum info
+ 
+	8. 列出所有软件包的信息 
+	命令：yum info
+ 
+	9. 列出所有可更新的软件包信息 
+	命令：yum info updates
+ 
+	10. 列出所有已安装的软件包信息 
+	命令：yum info installed
+ 
+	11. 列出所有已安装但不在 Yum Repository 内的软件包信息 
+	命令：yum info extras
+ 
+	12. 列出软件包提供哪些文件 
+	命令：yum provides
+	13. 列出所有已安装的软件包
+	[root@iZ28j6jspynZ node-v6.9.4]# yum list installed
+
 * 一个文件过大，我们想清空文件内容而不删掉该文件
 
 ```shell
