@@ -10,39 +10,39 @@ CentOS5的时代，由于yum源中没有git，所以需要预先安装一系列�
 ```
 
 ## 下载git源码编译安装
-1. 更新系统
+1.更新系统
 ```shell
-yum update
+[root@iZ28j6jspynZ mnt]# yum update
 ```
-2. 安装依赖包
+2.安装依赖包
 ```shell
-sudo yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker
+[root@iZ28j6jspynZ mnt]# sudo yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker
 ```
-3. 下载git源码包并解压缩
+3.下载git源码包并解压缩
 ```shell
-$ wget https://github.com/git/git/archive/v2.3.0.zip
-$ unzip v2.3.0.zip
-$ cd git-2.3.0
+[root@iZ28j6jspynZ mnt]# wget https://github.com/git/git/archive/v2.3.0.zip
+[root@iZ28j6jspynZ mnt]# unzip v2.3.0.zip
+[root@iZ28j6jspynZ mnt]# cd git-2.3.0
 ```
-4. 编译安装
+4.编译安装
 ```shell
-make prefix=/usr/local/git all
-sudo make prefix=/usr/local/git install
+[root@iZ28j6jspynZ mnt]# make prefix=/usr/local/git all
+[root@iZ28j6jspynZ mnt]# sudo make prefix=/usr/local/git install
 ```
-5. 查看git安装目录
+5.查看git安装目录
 ```shell
-$ whereis git
+[root@iZ28j6jspynZ mnt]# whereis git
 ```
-6. git环境变量配置
+6.git环境变量配置
 ```shell
-sudo vim /etc/profile
+[root@iZ28j6jspynZ mnt]# sudo vim /etc/profile
 export PATH=/usr/local/git/bin:$PATH
 ```
-7. 使用source命令应用修改
+7.使用source命令应用修改
 ```shell
-source /etc/profile
+[root@iZ28j6jspynZ mnt]# source /etc/profile
 ```
-8. 查看安装git的版本
+8.查看安装git的版本
 ```shell
-git --version
+[root@iZ28j6jspynZ mnt]# git --version
 ```
