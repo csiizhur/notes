@@ -79,6 +79,30 @@ Filesystem            Size  Used Avail Use% Mounted on
 tmpfs                 7.9G     0  7.9G   0% /dev/shm
 /dev/xvdb1            985G  6.0G  929G   1% /mnt/data
 ```
+* 列出目录结构(以树状图列出目录的内容)
+
+```shell
+[root@iZ28j6jspynZ ~]# yum search tree
+[root@iZ28j6jspynZ ~]# yum install tree      //安装tree命令
+```
+```shell
+[root@iZ28j6jspynZ vue2.x-douban]# tree -L 1  //只显示第一层目录
+.
+|-- README.md
+|-- build
+|-- config
+|-- docs
+|-- git.sh
+|-- index.html
+|-- node_modules
+|-- package.json
+|-- src
+|-- static
+`-- tree.md
+```
+```shell
+[root@iZ28j6jspynZ vue2.x-douban]# tree -d   //只显示目录
+```
 
 * 查看服务监听端口，PID状态。
 
