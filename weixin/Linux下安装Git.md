@@ -46,3 +46,7 @@ export PATH=/usr/local/git/bin:$PATH
 ```shell
 [root@iZ28j6jspynZ mnt]# git --version
 ```
+## 使用git bash删除远程仓库分支
+```shell
+git push origin :HEAD  //推送一个空分支到远程分支，其实就相当于删除远程分支
+```
