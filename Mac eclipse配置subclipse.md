@@ -1,9 +1,11 @@
 # mac环境下需要JavaHL
-* 安装homebrew在终端输入
+
+* 安装homebrew在终端输入(打开HomeBrew的主页：http://brew.sh)
 ```shell
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+或者      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
-* 安装javahl在终端输入
+* 安装javahl在终端输入(提示有个包下不到，原因你懂得，被墙了)
 ```shell
 brew install --universal --java subversion
 ```
