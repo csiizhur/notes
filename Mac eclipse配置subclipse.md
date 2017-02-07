@@ -42,3 +42,12 @@ sudo ln -s /usr/local/homebrew/lib/libsvnjavahl-1.dylib /Library/Java/Extensions
 2.点击add按钮，name随便输入，Location输入http://subclipse.tigris.org/update_1.12.x
 * 设置Eclipse的Preferencess
 svn接口：client JavaHL(JNI)1.9.5(r174.329)
+
+* 建立软连接
+    终端中执行：sudo mkdir -p /Library/Java/Extensions
+    终端中执行：sudo ln -s /usr/local/lib/libsvnjavahl-1.dylib /Library/Java/Extensions/libsvnjavahl-1.dylib
+    注意：在这个目录下有这个文件时才能创建软连接成功/usr/local/lib/libsvnjavahl-1.dylib
+     (如果没有，可取/usr/local/目录下寻找，一般都在此目录下) 
+       建立软链接之后，先去/Library/Java/Extensions目录下找到建立的软连接，右键显示原生，
+     如果能够显示成功说明建立软连接成功，才能保证到eclipse中找到javaHL。
+说明：在解决错误，重新运行安装命令时，可能会看到警告(Waring)，不用担心，可以直接忽略。
