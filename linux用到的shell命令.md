@@ -1,4 +1,20 @@
 #linux会用到的操作
+
+* ssh登陆切换会话
+
+```shell
+bogon:~ zhurun$ ssh root@121.42.8.84
+root@121.42.8.84's password: 
+Last login: Tue Feb  7 09:48:29 2017 from 112.80.58.198
+
+Welcome to aliyun Elastic Compute Service!
+[root@iZ283ujwpe6Z ~]# exit
+logout
+
+Connection to 121.42.8.84 closed.
+bogon:~ zhurun$
+```
+
 * Linux查看版本当前操作系统内核信息
 
 ```shell
