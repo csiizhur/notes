@@ -41,7 +41,7 @@ sudo ln -s /usr/local/homebrew/lib/libsvnjavahl-1.dylib /Library/Java/Extensions
 1.Eclipse-Help-Install New Software...
 2.点击add按钮，name随便输入，Location输入http://subclipse.tigris.org/update_1.12.x
 * 设置Eclipse的Preferencess
-svn接口：client JavaHL(JNI)1.9.5(r174.329)
+svn接口：client JavaHL(JNI)1.9.5(r1770682)
 
 # 建立软连接不成功会导致eclipse中找不到JavaHL(http://blog.csdn.net/zhuo212/article/details/51278018)
 ```shell
